@@ -69,4 +69,34 @@ class PublicController extends Controller
             'total' => $data->count(),
         ], 200);
     }
+
+    /*
+    * Detail Bengkel
+    */
+    public function detailBengkel($id)
+    {
+        $bengkel = Bengkel::with('layananBengkel')->find($id);
+        if (!$bengkel) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Bengkel tidak ditemukan',
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Detail bengkel ditemukan',
+            'data' => [
+                'bengkel' => [
+                    'id' => $bengkel->id,
+                    'nama' => $bengkel->nama,
+                    'alamat' => $bengkel->alamat,
+                    'latitude' => $bengkel->latitude,
+                    'longitude' => $bengkel->longitude,
+                    'foto' => $bengkel->foto ? asset($bengkel->foto) : null,
+                ],
+                'layanan' => $bengkel->layananBengkel,
+            ],
+        ], 200);
+    }
 }

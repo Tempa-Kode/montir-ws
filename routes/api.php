@@ -36,4 +36,5 @@ Route::prefix('bengkel-management')->middleware('auth:sanctum')->group(function 
 
 Route::prefix('public')->group(function () {
     Route::get('/cari-bengkel', [App\Http\Controllers\Api\PublicController::class, 'cariBengkelTedekatBerdasarkanJenisLayanan']);
+    Route::get('/detail-bengkel/{id}', [App\Http\Controllers\Api\PublicController::class, 'detailBengkel']);
 });
