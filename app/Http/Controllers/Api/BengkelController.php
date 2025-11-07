@@ -61,4 +61,26 @@ class BengkelController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Cek status validasi bengkel
+     */
+    public function cekStatusValidasiBengkel(Request $request)
+    {
+        $user = $request->user();
+        $bengkel = Bengkel::where('user_id', $user->id)->first();
+
+        if (!$bengkel) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Bengkel tidak ditemukan',
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Status validasi bengkel berhasil diambil',
+            'data' => $bengkel
+        ], 200);
+    }
 }
