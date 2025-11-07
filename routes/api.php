@@ -14,7 +14,7 @@ Route::get('/ping', function() {
         'message' => 'Hi Aprilmen, your API is working fine!'
     ], 200);
 });
-    
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/profil', [App\Http\Controllers\Api\ProfilController::class, 'getProfil'])->middleware('auth:sanctum');
@@ -26,4 +26,11 @@ Route::prefix('bengkel-management')->middleware('auth:sanctum')->group(function 
     Route::post('/daftar-layanan', [App\Http\Controllers\Api\LayananBengkelContoller::class, 'daftarLayananBengkel']);
     Route::put('/update-layanan/{id}', [App\Http\Controllers\Api\LayananBengkelContoller::class, 'updateLayananBengkel']);
     Route::delete('/hapus-layanan/{id}', [App\Http\Controllers\Api\LayananBengkelContoller::class, 'hapusLayananBengkel']);
+
+    Route::prefix('montir')->group(function () {
+        // Route::get('/daftar-montir', [App\Http\Controllers\Api\MontirBengkelController::class, 'daftarMontirBengkel']);
+        Route::post('/tambah-montir', [App\Http\Controllers\Api\MontirBengkelController::class, 'tambahMontirBengkel']);
+        // Route::put('/update-montir/{id}', [App\Http\Controllers\Api\MontirBengkelController::class, 'updateMontirBengkel']);
+        // Route::delete('/hapus-montir/{id}', [App\Http\Controllers\Api\MontirBengkelController::class, 'hapusMontirBengkel']);
+    });
 });
