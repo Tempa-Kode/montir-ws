@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 
 class ProfilController extends Controller
 {
@@ -43,5 +44,44 @@ class ProfilController extends Controller
                 'user' => $user
             ]
         ], 200);
+    }
+
+    /**
+     * Update user profile
+     */
+    public function updateProfil(Request $request)
+    {
+        $user = $request->user();
+        $validasi = $request->validate([
+            'nama' => 'required|string|max:50',
+            'alamat' => 'required|string',
+            'no_telp' => 'required|string|max:15',
+            'email' => 'required|string|email|max:50|unique:users,email,' . $user->id,
+            'password' => 'required|string|min:8|confirmed',
+            'role' => 'required|in:pelanggan,bengkel',
+        ]);
+
+        DB::beginTransaction();
+        try{
+            if (isset($validasi['password'])) {
+                $validasi['password'] = bcrypt($validasi['password']);
+            }
+
+            $user->update($validasi);
+            DB::commit();
+            return response()->json([
+                'status' => true,
+                'message' => 'Profil berhasil diperbarui',
+                'data' => $user
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Gagal memperbarui profil: ' . $e->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => 'Profil gagal diperbarui',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }
