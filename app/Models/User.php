@@ -18,10 +18,19 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'nama',
+        'alamat',
+        'no_telp',
         'email',
         'password',
+        'role',
+        'foto',
     ];
+
+    public const ROLE_ADMIN = 'admin';
+    public const ROLE_BENGKEL = 'bengkel';
+    public const ROLE_PELANGGAN = 'pelanggan';
+    public const ROLE_MONTIR = 'montir';
 
     /**
      * The attributes that should be hidden for serialization.
@@ -30,7 +39,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
@@ -41,8 +49,17 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function bengkel()
+    {
+        return $this->hasOne(Bengkel::class);
+    }
+
+    public function montir()
+    {
+        return $this->hasOne(Montir::class);
     }
 }
