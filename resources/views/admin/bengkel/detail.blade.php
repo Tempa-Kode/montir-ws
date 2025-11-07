@@ -98,7 +98,7 @@
                             <tbody>
                                 @forelse ($bengkel->layananBengkel as $layanan)
                                     <tr>
-                                        <th scope="row">{{ $loop->iteration() }}</th>
+                                        <th scope="row">{{ $loop->iteration }}</th>
                                         <td>{{ $layanan->jenis_layanan }}</td>
                                     </tr>
                                 @empty
@@ -131,10 +131,10 @@
                             <tbody>
                                 @forelse ($bengkel->montirs as $montir)
                                     <tr>
-                                        <th scope="row">{{ $loop->iteration() }}</th>
-                                        <td>{{ $montir->nama }}</td>
-                                        <td>{{ $montir->no_telp }}</td>
-                                        <td>{{ $montir->email }}</td>
+                                        <th scope="row">{{ $loop->iteration }}</th>
+                                        <td>{{ $montir->user->nama }}</td>
+                                        <td>{{ $montir->user->no_telp }}</td>
+                                        <td>{{ $montir->user->email }}</td>
                                     </tr>
                                 @empty
                                     <tr>
