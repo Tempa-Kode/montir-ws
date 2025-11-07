@@ -18,6 +18,7 @@
         <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
         <link href="{{ asset('plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('plugins/font-awesome/css/all.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('plugins/DataTables/datatables.min.css') }}" rel="stylesheet">
 
 
         <!-- Theme Styles -->
@@ -43,11 +44,11 @@
                 <div class="logo-box"><a href="#" class="logo-text">MontirApp</a><a href="#" id="sidebar-close"><i class="material-icons">close</i></a> <a href="#" id="sidebar-state"><i class="material-icons">adjust</i><i class="material-icons compact-sidebar-icon">panorama_fish_eye</i></a></div>
                 <div class="page-sidebar-inner slimscroll">
                     <ul class="accordion-menu">
-                        <li class="active-page">
-                            <a href="index.html" class="active"><i class="material-icons-outlined">dashboard</i>Dashboard</a>
+                        <li class="{{ Route::currentRouteName() === 'dashboard' ? 'active-page' : '' }}">
+                            <a href="{{ route('dashboard') }}"><i class="material-icons-outlined">dashboard</i>Dashboard</a>
                         </li>
-                        <li>
-                            <a href="mailbox.html"><i class="material-icons-outlined">account_circle</i>Pelanggan</a>
+                        <li class="{{ Route::currentRouteName() === 'pelanggan.index' ? 'active-page' : '' }}">
+                            <a href="{{ route('pelanggan.index') }}"><i class="material-icons-outlined">account_circle</i>Pelanggan</a>
                         </li>
                         <li>
                             <a href="profile.html"><i class="material-icons-outlined">account_circle</i>Bengkel</a>
@@ -91,14 +92,7 @@
                     </nav>
                 </div>
                 <div class="page-content">
-                    <div class="page-info">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-                            </ol>
-                        </nav>
-                    </div>
+                    @yield('breadcrumb')
                     <div class="main-wrapper">
                         @yield('main')
                     </div>
@@ -128,5 +122,8 @@
         <script src="{{ asset('plugins/flot/jquery.flot.tooltip.min.js') }}"></script>
         <script src="{{ asset('js/connect.min.js') }}"></script>
         <script src="{{ asset('js/pages/dashboard.js') }}"></script>
+
+        <script src="{{ asset('plugins/DataTables/datatables.min.js') }}"></script>
+        <script src="{{ asset('js/pages/datatables.js') }}"></script>
     </body>
 </html>

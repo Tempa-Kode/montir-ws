@@ -11,4 +11,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('dashboard');
+
+    Route::prefix('pelanggan')->group(function () {
+        Route::get('/', [App\Http\Controllers\PelangganController::class, 'index'])->name('pelanggan.index');
+    });
 });
