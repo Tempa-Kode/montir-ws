@@ -33,3 +33,7 @@ Route::prefix('bengkel-management')->middleware('auth:sanctum')->group(function 
         Route::delete('/hapus-montir/{id}', [App\Http\Controllers\Api\MontirBengkelController::class, 'hapusMontirBengkel']);
     });
 });
+
+Route::prefix('public')->group(function () {
+    Route::get('/cari-bengkel', [App\Http\Controllers\Api\PublicController::class, 'cariBengkelTedekatBerdasarkanJenisLayanan']);
+});
