@@ -45,4 +45,34 @@ class AuthController extends Controller
             ], 500);
         }
     }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
+        if (auth()->attempt($credentials)) {
+            $user = auth()->user();
+            return response()->json([
+                'status' => true,
+                'message' => 'Login berhasil',
+                'data' => [
+                    'id' => $user->id,
+                    'nama' => $user->nama,
+                    'alamat' => $user->alamat,
+                    'no_telp' => $user->no_telp,
+                    'email' => $user->email,
+                    'role' => $user->role,
+                ],
+                'token' => $user->createToken('auth_token')->plainTextToken,
+            ], 200);
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Login gagal',
+        ], 401);
+    }
 }
