@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,3 +14,5 @@ Route::get('/ping', function() {
         'message' => 'Hi Aprilmen, your API is working fine!'
     ], 200);
 });
+
+Route::post('/register', [AuthController::class, 'register']);
