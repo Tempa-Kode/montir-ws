@@ -28,9 +28,8 @@ Route::prefix('bengkel-management')->middleware('auth:sanctum')->group(function 
     Route::delete('/hapus-layanan/{id}', [App\Http\Controllers\Api\LayananBengkelContoller::class, 'hapusLayananBengkel']);
 
     Route::prefix('montir')->group(function () {
-        // Route::get('/daftar-montir', [App\Http\Controllers\Api\MontirBengkelController::class, 'daftarMontirBengkel']);
+        Route::get('/daftar-montir', [App\Http\Controllers\Api\MontirBengkelController::class, 'daftarMontirBengkel']);
         Route::post('/tambah-montir', [App\Http\Controllers\Api\MontirBengkelController::class, 'tambahMontirBengkel']);
-        // Route::put('/update-montir/{id}', [App\Http\Controllers\Api\MontirBengkelController::class, 'updateMontirBengkel']);
-        // Route::delete('/hapus-montir/{id}', [App\Http\Controllers\Api\MontirBengkelController::class, 'hapusMontirBengkel']);
+        Route::delete('/hapus-montir/{id}', [App\Http\Controllers\Api\MontirBengkelController::class, 'hapusMontirBengkel']);
     });
 });
