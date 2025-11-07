@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -22,7 +24,7 @@ class AuthController extends Controller
         $validasi['password'] = bcrypt($validasi['password']);
         DB::beginTransaction();
         try {
-            $user = \App\Models\User::create($validasi);
+            $user = User::create($validasi);
             DB::commit();
             return response()->json([
                 'status' => true,
@@ -53,19 +55,27 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        if (auth()->attempt($credentials)) {
-            $user = auth()->user();
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+
+            $data = [
+                'id' => $user->id,
+                'nama' => $user->nama,
+                'alamat' => $user->alamat,
+                'no_telp' => $user->no_telp,
+                'email' => $user->email,
+                'role' => $user->role,
+                'foto' => $user->foto,
+            ];
+
+            if ($user->role === User::ROLE_BENGKEL) {
+                $data['bengkel'] = $user->bengkel;
+            }
+
             return response()->json([
                 'status' => true,
                 'message' => 'Login berhasil',
-                'data' => [
-                    'id' => $user->id,
-                    'nama' => $user->nama,
-                    'alamat' => $user->alamat,
-                    'no_telp' => $user->no_telp,
-                    'email' => $user->email,
-                    'role' => $user->role,
-                ],
+                'data' => $data,
                 'token' => $user->createToken('auth_token')->plainTextToken,
             ], 200);
         }
