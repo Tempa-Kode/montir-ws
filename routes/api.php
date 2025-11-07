@@ -22,4 +22,5 @@ Route::get('/profil', [App\Http\Controllers\Api\ProfilController::class, 'getPro
 Route::prefix('bengkel-management')->middleware('auth:sanctum')->group(function () {
     Route::post('/simpan-data-bengkel', [App\Http\Controllers\Api\BengkelController::class, 'simpanDataBengkel']);
     Route::get('/cek-validasi', [App\Http\Controllers\Api\BengkelController::class, 'cekStatusValidasiBengkel']);
+    Route::post('/daftar-layanan', [App\Http\Controllers\Api\BengkelController::class, 'daftarLayananBengkel']);
 });

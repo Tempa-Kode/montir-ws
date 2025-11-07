@@ -83,4 +83,48 @@ class BengkelController extends Controller
             'data' => $bengkel
         ], 200);
     }
+
+    /*
+    * Bengkel mendaftarkan layanan bengkel yang disediakan
+    */
+    public function daftarLayananBengkel(Request $request)
+    {
+        $validasi = $request->validate([
+            'jenis_layanan' => 'required|array',
+            'jenis_layanan.*' => 'string|max:100',
+        ]);
+
+        $user = $request->user();
+        $bengkel = Bengkel::where('user_id', $user->id)->first();
+
+        if (!$bengkel) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Bengkel tidak ditemukan',
+            ], 404);
+        }
+
+        foreach ($validasi['jenis_layanan'] as $layanan) {
+            $bengkel->layananBengkel()->create([
+                'bengkel_id' => $bengkel->id,
+                'jenis_layanan' => $layanan,
+            ]);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Layanan bengkel berhasil didaftarkan',
+            'data' => [
+                'bengkel' => [
+                    'id' => $bengkel->id,
+                    'nama' => $bengkel->nama,
+                    'alamat' => $bengkel->alamat,
+                    'latitude' => $bengkel->latitude,
+                    'longitude' => $bengkel->longitude,
+                    'foto' => $bengkel->foto,
+                ],
+                'layanan' => $bengkel->layananBengkel()->get()
+            ]
+        ], 200);
+    }
 }
