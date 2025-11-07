@@ -36,4 +36,19 @@ class OrderLayananController extends Controller
             ], 500);
         }
     }
+
+    public function listOrderLayanan(Request $request)
+    {
+        $pelangganId = $request->user()->id;
+
+        $orders = OrderLayanan::where('pelanggan_id', $pelangganId)
+            ->with('layananBengkel.bengkel')
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $orders
+        ], 200);
+    }
 }
