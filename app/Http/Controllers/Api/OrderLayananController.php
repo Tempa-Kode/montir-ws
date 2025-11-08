@@ -130,4 +130,70 @@ class OrderLayananController extends Controller
             'data' => $orderLayanan
         ], 200);
     }
+
+    /*
+    * Pelanggan : upload bukti pembayaran
+    */
+    public function uploadBuktiPembayaran(Request $request, $orderLayananId)
+    {
+        $validasi = $request->validate([
+            'bukti_bayar' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $orderLayanan = OrderLayanan::find($orderLayananId);
+        if (!$orderLayanan) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Order layanan tidak ditemukan'
+            ], 404);
+        }
+
+        DB::beginTransaction();
+        try {
+            // Hapus file lama jika ada
+            if ($orderLayanan->bukti_bayar && file_exists(public_path($orderLayanan->bukti_bayar))) {
+                unlink(public_path($orderLayanan->bukti_bayar));
+            }
+
+            // Handle upload foto
+            $file = $request->file('bukti_bayar');
+            $filename = 'bukti_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            // Pastikan folder uploads ada
+            $uploadPath = public_path('uploads/bukti_pembayaran');
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0755, true);
+            }
+
+            // Pindahkan file ke public/uploads/bukti_pembayaran
+            $file->move($uploadPath, $filename);
+
+            // Simpan path relatif ke database
+            $orderLayanan->bukti_bayar = 'uploads/bukti_pembayaran/' . $filename;
+            $orderLayanan->status_pembayaran = 'belum-lunas';
+            $orderLayanan->save();
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Bukti pembayaran berhasil diupload',
+                'data' => $orderLayanan
+            ], 200);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            // Hapus file jika ada error
+            if (isset($filename) && file_exists(public_path('uploads/bukti_pembayaran/' . $filename))) {
+                unlink(public_path('uploads/bukti_pembayaran/' . $filename));
+            }
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal mengupload bukti pembayaran',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
