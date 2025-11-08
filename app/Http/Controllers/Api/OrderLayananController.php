@@ -136,14 +136,22 @@ class OrderLayananController extends Controller
     */
     public function uploadBuktiPembayaran(Request $request, $orderLayananId)
     {
-        $validasi = $request->validate([
-            'bukti_bayar' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-        ]);
+        try {
+            $validasi = $request->validate([
+                'bukti_bayar' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validasi gagal',
+                'errors' => $e->errors()
+            ], 422);
+        }
 
         $orderLayanan = OrderLayanan::find($orderLayananId);
         if (!$orderLayanan) {
             return response()->json([
-                'status' => 'error',
+                'status' => false,
                 'message' => 'Order layanan tidak ditemukan'
             ], 404);
         }
@@ -176,7 +184,7 @@ class OrderLayananController extends Controller
             DB::commit();
 
             return response()->json([
-                'status' => 'success',
+                'status' => true,
                 'message' => 'Bukti pembayaran berhasil diupload',
                 'data' => $orderLayanan
             ], 200);
@@ -190,7 +198,7 @@ class OrderLayananController extends Controller
             }
 
             return response()->json([
-                'status' => 'error',
+                'status' => false,
                 'message' => 'Gagal mengupload bukti pembayaran',
                 'error' => $e->getMessage()
             ], 500);
