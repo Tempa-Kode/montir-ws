@@ -276,7 +276,7 @@ class OrderLayananController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Ulasan dan rating berhasil disimpan',
-            'data' => $orderLayanan
+            'data' => $ulasanRating
         ], 200);
     }
 }
