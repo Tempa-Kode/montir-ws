@@ -13,7 +13,10 @@ class BengkelController extends Controller
     */
     public function index()
     {
-        $bengkel = Bengkel::with('user')->latest()->get();
+        $bengkel = Bengkel::with('user')
+            ->withAvg('ulasanRatings', 'rating')
+            ->latest()
+            ->get();
         return view('admin.bengkel.index', compact('bengkel'));
     }
 
