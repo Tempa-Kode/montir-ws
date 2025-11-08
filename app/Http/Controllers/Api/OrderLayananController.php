@@ -73,6 +73,33 @@ class OrderLayananController extends Controller
     }
 
     /*
+    * Melihat detail order layanan
+    */
+    public function detailOrderLayanan($orderLayananId)
+    {
+        $orderLayanan = OrderLayanan::with(
+                'pelanggan',
+                'montir',
+                'montir.user',
+                'montir.bengkel',
+                'layananBengkel',
+                'itemService'
+            )->find($orderLayananId);
+
+        if (!$orderLayanan) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Order layanan tidak ditemukan'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $orderLayanan
+        ], 200);
+    }
+
+    /*
     * Bengkel : menugaskan montir
     */
     public function assignMontirToOrderLayanan(Request $request, $orderLayananId)

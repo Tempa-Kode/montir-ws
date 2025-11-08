@@ -50,4 +50,5 @@ Route::prefix('public')->group(function () {
 Route::prefix('order-layanan')->middleware('auth:sanctum')->group(function () {
     Route::post('/buat-order', [App\Http\Controllers\Api\OrderLayananController::class, 'buatOrderLayanan']);
     Route::get('/order-history', [App\Http\Controllers\Api\OrderLayananController::class, 'listOrderLayanan']);
+    Route::get('/detail-order/{id}', [App\Http\Controllers\Api\OrderLayananController::class, 'detailOrderLayanan']);
 });
