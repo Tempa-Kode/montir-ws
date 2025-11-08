@@ -17,7 +17,13 @@ Route::get('/ping', function() {
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::get('/profil', [App\Http\Controllers\Api\ProfilController::class, 'getProfil'])->middleware('auth:sanctum');
+
+Route::prefix('profil')->middleware('auth:sanctum')->group(function () {
+    Route::get('/', [App\Http\Controllers\Api\ProfilController::class, 'getProfil']);
+    Route::put('/update', [App\Http\Controllers\Api\ProfilController::class, 'updateProfil']);
+    Route::post('/update-foto', [App\Http\Controllers\Api\ProfilController::class, 'updateFotoProfil']);
+    Route::put('/change-password', [App\Http\Controllers\Api\ProfilController::class, 'changePassword']);
+});
 
 Route::prefix('bengkel-management')->middleware('auth:sanctum')->group(function () {
     Route::post('/simpan-data-bengkel', [App\Http\Controllers\Api\BengkelController::class, 'simpanDataBengkel']);
