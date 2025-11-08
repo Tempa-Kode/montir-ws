@@ -204,4 +204,27 @@ class OrderLayananController extends Controller
             ], 500);
         }
     }
+
+    /*
+    * Bengkel : menerima pembayaran dan mengubah status pembayaran
+     */
+    public function validatePembayaranOrderLayanan($orderLayananId)
+    {
+        $orderLayanan = OrderLayanan::find($orderLayananId);
+        if (!$orderLayanan) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Order layanan tidak ditemukan'
+            ], 404);
+        }
+
+        $orderLayanan->status_pembayaran = 'lunas';
+        $orderLayanan->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Pembayaran berhasil divalidasi',
+            'data' => $orderLayanan
+        ], 200);
+    }
 }

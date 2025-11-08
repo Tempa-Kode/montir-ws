@@ -39,6 +39,7 @@ Route::prefix('bengkel-management')->middleware('auth:sanctum')->group(function 
         Route::put('/update/kelokasi/{order_id}', [App\Http\Controllers\Api\MontirLayananController::class, 'menujuKelokasi']);
         Route::put('/update/kerjakan/{order_id}', [App\Http\Controllers\Api\MontirLayananController::class, 'mengerjakanService']);
         Route::put('/update/selesai/{order_id}', [App\Http\Controllers\Api\MontirLayananController::class, 'menyelesaikanPekerjaan']);
+        Route::put('/validasi-pembayaran/{order_id}', [App\Http\Controllers\Api\OrderLayananController::class, 'validatePembayaranOrderLayanan']);
     });
 });
 
