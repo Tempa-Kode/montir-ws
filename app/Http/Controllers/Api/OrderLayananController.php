@@ -71,4 +71,36 @@ class OrderLayananController extends Controller
             'data' => $orders
         ], 200);
     }
+
+    /*
+    * Bengkel : menugaskan montir
+    */
+    public function assignMontirToOrderLayanan(Request $request, $orderLayananId)
+    {
+        $validasi = $request->validate([
+            'montir_id' => 'required|integer|exists:montir,id',
+        ]);
+
+        $orderLayanan = OrderLayanan::with(
+                'montir',
+                'montir.user',
+                'montir.bengkel',
+                'layananBengkel'
+            )->find($orderLayananId);
+        if (!$orderLayanan) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Order layanan tidak ditemukan'
+            ], 404);
+        }
+
+        $orderLayanan->montir_id = $validasi['montir_id'];
+        $orderLayanan->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Montir berhasil ditugaskan ke order layanan',
+            'data' => $orderLayanan
+        ], 200);
+    }
 }
