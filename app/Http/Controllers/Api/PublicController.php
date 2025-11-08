@@ -75,7 +75,12 @@ class PublicController extends Controller
     */
     public function detailBengkel($id)
     {
-        $bengkel = Bengkel::with('layananBengkel')->find($id);
+        $bengkel = Bengkel::with(
+            'layananBengkel',
+            'ulasanBengkel',
+            'ulasanBengkel.pelanggan'
+        )->find($id);
+
         if (!$bengkel) {
             return response()->json([
                 'status' => false,
@@ -94,8 +99,21 @@ class PublicController extends Controller
                     'latitude' => $bengkel->latitude,
                     'longitude' => $bengkel->longitude,
                     'foto' => $bengkel->foto ? asset($bengkel->foto) : null,
+                    'rating' => $bengkel->ulasanBengkel->avg('rating'),
                 ],
                 'layanan' => $bengkel->layananBengkel,
+                'ulasan' => $bengkel->ulasanBengkel->map(function($ulasan) {
+                    return [
+                        'id' => $ulasan->id,
+                        'rating' => $ulasan->rating,
+                        'komentar' => $ulasan->komentar,
+                        'pelanggan' => [
+                            'id' => $ulasan->pelanggan->id,
+                            'nama' => $ulasan->pelanggan->nama,
+                            'foto' => $ulasan->pelanggan->foto ? asset($ulasan->pelanggan->foto) : null,
+                        ],
+                    ];
+                }),
             ],
         ], 200);
     }

@@ -32,4 +32,9 @@ class Bengkel extends Model
     {
         return $this->hasMany(LayananBengkel::class, 'bengkel_id');
     }
+
+    public function ulasanBengkel()
+    {
+        return $this->hasMany(UlasanRating::class, 'bengkel_id');
+    }
 }
