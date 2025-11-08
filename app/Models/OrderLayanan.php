@@ -39,4 +39,9 @@ class OrderLayanan extends Model
     {
         return $this->hasMany(ItemService::class, 'order_layanan_id');
     }
+
+    public function ulasanRating() 
+    {
+        return $this->hasOne(UlasanRating::class, 'order_layanan_id');
+    }
 }

@@ -22,4 +22,9 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/{id}/reject', [App\Http\Controllers\BengkelController::class, 'reject'])->name('bengkel.reject');
         Route::patch('/{id}/accept', [App\Http\Controllers\BengkelController::class, 'accept'])->name('bengkel.accept');
     });
+
+    Route::prefix('transaksi')->group(function () {
+        Route::get('/', [App\Http\Controllers\TransaksiController::class, 'index'])->name('transaksi.index');
+        Route::get('/{id}', [App\Http\Controllers\TransaksiController::class, 'show'])->name('transaksi.show');
+    });
 });

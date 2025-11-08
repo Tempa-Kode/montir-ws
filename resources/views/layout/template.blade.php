@@ -53,8 +53,8 @@
                         <li class="{{ Route::currentRouteName() === 'bengkel.index' ? 'active-page' : '' }}">
                             <a href="{{ route('bengkel.index') }}"><i class="material-icons-outlined">account_circle</i>Bengkel</a>
                         </li>
-                        <li>
-                            <a href="file-manager.html"><i class="material-icons">cloud_queue</i>Transaksi</a>
+                        <li class="{{ Route::currentRouteName() === 'transaksi.index' ? 'active-page' : '' }}">
+                            <a href="{{ route('transaksi.index') }}"><i class="material-icons">cloud_queue</i>Transaksi</a>
                         </li>
                     </ul>
                 </div>
