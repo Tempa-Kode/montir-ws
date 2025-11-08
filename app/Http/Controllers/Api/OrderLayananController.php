@@ -6,6 +6,7 @@ use App\Models\OrderLayanan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\UlasanRating;
 
 class OrderLayananController extends Controller
 {
@@ -208,7 +209,7 @@ class OrderLayananController extends Controller
     /*
     * Bengkel : menerima pembayaran dan mengubah status pembayaran
      */
-    public function validatePembayaranOrderLayanan($orderLayananId)
+    public function validatePembayaranOrderLayanan(Request $request, $orderLayananId)
     {
         $orderLayanan = OrderLayanan::find($orderLayananId);
         if (!$orderLayanan) {
@@ -218,12 +219,63 @@ class OrderLayananController extends Controller
             ], 404);
         }
 
+        // Validasi: hanya bisa upload jika status selesai
+        if ($orderLayanan->status !== 'selesai') {
+            return response()->json([
+                'status' => false,
+                'message' => 'Bukti pembayaran hanya bisa diupload setelah pekerjaan selesai'
+            ], 400);
+        }
+
+        // Validasi: cek apakah user adalah pemilik order
+        if ($orderLayanan->pelanggan_id !== $request->user()->id) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Anda tidak memiliki akses untuk order ini'
+            ], 403);
+        }
+
         $orderLayanan->status_pembayaran = 'lunas';
         $orderLayanan->save();
 
         return response()->json([
             'status' => true,
             'message' => 'Pembayaran berhasil divalidasi',
+            'data' => $orderLayanan
+        ], 200);
+    }
+
+    /*
+    * Pelanggan : memberikan ulasan dan rating
+     */
+    public function berikanUlasanDanRating(Request $request, $orderLayananId)
+    {
+        $validasi = $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'ulasan' => 'nullable|string|max:1000',
+        ]);
+
+        $orderLayanan = OrderLayanan::find($orderLayananId);
+        if (!$orderLayanan) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Order layanan tidak ditemukan'
+            ], 404);
+        }
+
+        $ulasanRating = UlasanRating::updateOrCreate(
+            ['order_layanan_id' => $orderLayananId],
+            [
+                'pelanggan_id' => $request->user()->id,
+                'bengkel_id' => $orderLayanan->layananBengkel->bengkel_id,
+                'rating' => $validasi['rating'],
+                'ulasan' => $validasi['ulasan'] ?? null,
+            ]
+        );
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Ulasan dan rating berhasil disimpan',
             'data' => $orderLayanan
         ], 200);
     }
