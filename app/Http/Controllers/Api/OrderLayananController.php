@@ -51,4 +51,24 @@ class OrderLayananController extends Controller
             'data' => $orders
         ], 200);
     }
+
+    /*
+     * Bengkel : menampilkan data order layanan dari bengkel
+     */
+    public function listOrderLayananBengkel(Request $request)
+    {
+        $bengkelId = $request->user()->bengkel->id;
+
+        $orders = OrderLayanan::whereHas('layananBengkel', function($query) use ($bengkelId) {
+                $query->where('bengkel_id', $bengkelId);
+            })
+            ->with('pelanggan', 'layananBengkel')
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $orders
+        ], 200);
+    }
 }

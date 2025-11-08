@@ -32,6 +32,11 @@ Route::prefix('bengkel-management')->middleware('auth:sanctum')->group(function 
         Route::post('/tambah-montir', [App\Http\Controllers\Api\MontirBengkelController::class, 'tambahMontirBengkel']);
         Route::delete('/hapus-montir/{id}', [App\Http\Controllers\Api\MontirBengkelController::class, 'hapusMontirBengkel']);
     });
+
+    Route::prefix('order-layanan')->group(function () {
+        Route::get('/list-order-bengkel', [App\Http\Controllers\Api\OrderLayananController::class, 'listOrderLayananBengkel']);
+        Route::post('/update-status-order/{id}', [App\Http\Controllers\Api\OrderLayananController::class, 'updateStatusOrderLayanan']);
+    });
 });
 
 Route::prefix('public')->group(function () {
