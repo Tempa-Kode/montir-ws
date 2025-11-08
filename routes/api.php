@@ -53,4 +53,5 @@ Route::prefix('order-layanan')->middleware('auth:sanctum')->group(function () {
     Route::get('/order-history', [App\Http\Controllers\Api\OrderLayananController::class, 'listOrderLayanan']);
     Route::get('/detail-order/{id}', [App\Http\Controllers\Api\OrderLayananController::class, 'detailOrderLayanan']);
     Route::post('/pembayaran/{orderLayananId}', [App\Http\Controllers\Api\OrderLayananController::class, 'uploadBuktiPembayaran']);
+    Route::post('/ulasan/{orderLayananId}', [App\Http\Controllers\Api\OrderLayananController::class, 'berikanUlasanDanRating']);
 });
