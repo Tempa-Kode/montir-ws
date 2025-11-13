@@ -61,6 +61,6 @@ class User extends Authenticatable
 
     public function montir()
     {
-        return $this->hasOne(Montir::class);
+        return $this->hasMany(Montir::class);
     }
 }

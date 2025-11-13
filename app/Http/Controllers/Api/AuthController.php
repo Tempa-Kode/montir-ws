@@ -72,6 +72,14 @@ class AuthController extends Controller
                 $data['bengkel'] = $user->bengkel;
             }
 
+            if ($user->role === User::ROLE_MONTIR) {
+                $montir = $user->montir()->with('bengkel')->first();
+                if ($montir) {
+                    $data['montir'] = $montir;
+                    $data['bengkel'] = $montir->bengkel;
+                }
+            }
+
             return response()->json([
                 'status' => true,
                 'message' => 'Login berhasil',
