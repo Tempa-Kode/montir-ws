@@ -49,6 +49,10 @@ Route::prefix('bengkel-management')->middleware('auth:sanctum')->group(function 
     });
 });
 
+Route::prefix('montir')->middleware('auth:sanctum')->group(function () {
+    Route::get('/order-layanan/{montir_id}', [App\Http\Controllers\Api\MontirLayananController::class, 'getOrderLayananByMontir']);
+});
+
 Route::prefix('public')->group(function () {
     Route::post('/cari-bengkel', [App\Http\Controllers\Api\PublicController::class, 'cariBengkelTedekatBerdasarkanJenisLayanan']);
     Route::get('/detail-bengkel/{id}', [App\Http\Controllers\Api\PublicController::class, 'detailBengkel']);
