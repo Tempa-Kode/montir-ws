@@ -16,7 +16,7 @@ class ProfilController extends Controller
 {
     /**
      * Get Profil User
-     * 
+     *
      * Mendapatkan informasi profil user yang sedang login
      */
     public function getProfil(Request $request)
@@ -35,7 +35,7 @@ class ProfilController extends Controller
                 ]
             ], 200);
         } elseif ($user->role === User::ROLE_MONTIR) {
-            $montir = $user->montir->bengkel ?? null;
+            $montir = $user->montir->first() ? $user->montir->first()->bengkel : null;
             return response()->json([
                 'status' => true,
                 'message' => 'Data profil montir berhasil diambil',
@@ -57,7 +57,7 @@ class ProfilController extends Controller
 
     /**
      * Update Profil User
-     * 
+     *
      * Memperbarui data profil user (nama, alamat, no telepon, email)
      */
     public function updateProfil(Request $request)
@@ -92,9 +92,9 @@ class ProfilController extends Controller
 
     /**
      * Update Foto Profil
-     * 
+     *
      * Mengupdate foto profil user
-     * 
+     *
      * @bodyParam foto file required File foto profil (max: 2MB, format: jpg, png, jpeg)
      */
     public function updateFotoProfil(Request $request)
@@ -164,7 +164,7 @@ class ProfilController extends Controller
 
     /**
      * Change Password
-     * 
+     *
      * Mengubah password user
      */
     public function changePassword(Request $request)
