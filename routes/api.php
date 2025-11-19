@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PembayaranController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -65,3 +66,15 @@ Route::prefix('order-layanan')->middleware('auth:sanctum')->group(function () {
     Route::post('/pembayaran/{orderLayananId}', [App\Http\Controllers\Api\OrderLayananController::class, 'uploadBuktiPembayaran']);
     Route::post('/ulasan/{orderLayananId}', [App\Http\Controllers\Api\OrderLayananController::class, 'berikanUlasanDanRating']);
 });
+
+/**
+ * Rute untuk membuat transaksi pembayaran
+ * Dipanggil oleh React Native SETELAH user membuat order
+ */
+Route::post('/payment/create', [PembayaranController::class, 'createTransaction'])->middleware('auth:sanctum');
+
+/**
+ * Rute untuk Webhook (Notifikasi) Midtrans
+ * Rute ini HARUS di luar middleware auth, karena akan dipanggil oleh server Midtrans
+ */
+Route::post('/payment/notification', [PembayaranController::class, 'notificationHandler']);
