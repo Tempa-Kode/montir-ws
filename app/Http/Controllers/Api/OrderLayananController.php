@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\UlasanRating;
+use Illuminate\Support\Str;
 
 class OrderLayananController extends Controller
 {
@@ -22,6 +23,8 @@ class OrderLayananController extends Controller
 
         DB::beginTransaction();
         try {
+            $kodeOrder = '#ORD' . time() . Str::random(5);
+            $validasi['kode_order'] = $kodeOrder;
             $orderLayanan = OrderLayanan::create($validasi);
             DB::commit();
             return response()->json([
