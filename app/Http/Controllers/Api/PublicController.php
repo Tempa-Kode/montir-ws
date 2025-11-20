@@ -106,7 +106,7 @@ class PublicController extends Controller
                     return [
                         'id' => $ulasan->id,
                         'rating' => $ulasan->rating,
-                        'komentar' => $ulasan->komentar,
+                        'komentar' => $ulasan->ulasan,
                         'pelanggan' => [
                             'id' => $ulasan->pelanggan->id,
                             'nama' => $ulasan->pelanggan->nama,
