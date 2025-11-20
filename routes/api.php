@@ -48,6 +48,8 @@ Route::prefix('bengkel-management')->middleware('auth:sanctum')->group(function 
         Route::put('/update/selesai/{order_id}', [App\Http\Controllers\Api\MontirLayananController::class, 'menyelesaikanPekerjaan']);
         Route::put('/validasi-pembayaran/{order_id}', [App\Http\Controllers\Api\OrderLayananController::class, 'validatePembayaranOrderLayanan']);
     });
+
+    Route::get('/rating-montir', [App\Http\Controllers\Api\BengkelController::class, 'getRatingMontirBengkel']);
 });
 
 Route::prefix('montir')->middleware('auth:sanctum')->group(function () {

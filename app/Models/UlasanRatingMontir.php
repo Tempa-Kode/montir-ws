@@ -23,7 +23,7 @@ class UlasanRatingMontir extends Model
 
     public function montir()
     {
-        return $this->belongsTo(User::class, 'montir_id');
+        return $this->belongsTo(Montir::class, 'montir_id');
     }
 
     public function orderLayanan()

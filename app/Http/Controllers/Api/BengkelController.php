@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\LayananBengkel;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Montir;
 
 class BengkelController extends Controller
 {
@@ -82,6 +83,50 @@ class BengkelController extends Controller
             'status' => true,
             'message' => 'Status validasi bengkel berhasil diambil',
             'data' => $bengkel
+        ], 200);
+    }
+
+    // mengambil data rating montir pada bengkel tertentu, untuk dijadikan bar chart pada dashboard bengkel di aplikasi mobile. untuk melihat seberapa banyak montir yang memiliki rating tertentu (1-5) pada bengkel tersebut.
+    // agar dapat mengambil keputusan terjadap kinerja montir.
+    public function getRatingMontirBengkel(Request $request)
+    {
+        $user = $request->user();
+        if($user->role === 'bengkel'){
+            $bengkel = Bengkel::where('user_id', $user->id)->first();
+        } else {
+            $montir = Montir::where('user_id', $user->id)->first();
+            $bengkel = $montir->bengkel;
+        }
+
+        if (!$bengkel) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Bengkel tidak ditemukan',
+            ], 404);
+        }
+
+        $montirRatings = DB::table('montir')
+            ->join('users', 'montir.user_id', '=', 'users.id')
+            ->leftJoin('ulasan_rating_montir', 'montir.id', '=', 'ulasan_rating_montir.montir_id') // Corrected join condition
+            ->where('montir.bengkel_id', $bengkel->id)
+            ->select(
+                'users.nama as nama_montir',
+                DB::raw('COALESCE(AVG(ulasan_rating_montir.rating), 0) as rating_rata_rata')
+            )
+            ->groupBy('montir.id', 'users.nama', 'montir.user_id') // Group by montir.id for distinct mechanics
+            ->orderBy('rating_rata_rata', 'desc') // Mengurutkan berdasarkan rating dari tertinggi
+            ->get();
+
+        // Konversi hasil rating ke float dengan satu desimal
+        $montirRatings = $montirRatings->map(function ($montir) {
+            $montir->rating_rata_rata = round((float)$montir->rating_rata_rata, 1);
+            return $montir;
+        });
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Data rating montir berhasil diambil',
+            'data' => $montirRatings
         ], 200);
     }
 }
