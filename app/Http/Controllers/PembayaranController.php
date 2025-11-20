@@ -39,12 +39,12 @@ class PembayaranController extends Controller
         $order = OrderLayanan::with('pelanggan')->where('kode_order', $request->kode_order)->first();
 
         // melakukan pemeriksaaan apakah order milik user yang sedang login
-        if ($order->pelanggan_id !== Auth::user()->id) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Unauthorized'
-            ], 403);
-        }
+        // if ($order->pelanggan_id !== Auth::user()->id) {
+        //     return response()->json([
+        //         'status' => false,
+        //         'message' => 'Unauthorized'
+        //     ], 403);
+        // }
 
         // jika order memiliki snap token dan statusnya pending makan akan mengembalikan token yang sudah ada
         if ($order->snap_token && $order->payment_status == 'pending') {
