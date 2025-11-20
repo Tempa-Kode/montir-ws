@@ -249,13 +249,15 @@ class OrderLayananController extends Controller
     }
 
     /*
-    * Pelanggan : memberikan ulasan dan rating
+    * Pelanggan : memberikan ulasan dan rating untuk bengkel dan montir
      */
     public function berikanUlasanDanRating(Request $request, $orderLayananId)
     {
         $validasi = $request->validate([
             'rating' => 'required|integer|min:1|max:5',
             'ulasan' => 'nullable|string|max:1000',
+            'rating_montir' => 'required|integer|min:1|max:5',
+            'ulasan_montir' => 'nullable|string|max:1000',
         ]);
 
         $orderLayanan = OrderLayanan::find($orderLayananId);
@@ -266,20 +268,40 @@ class OrderLayananController extends Controller
             ], 404);
         }
 
-        $ulasanRating = UlasanRating::updateOrCreate(
-            ['order_layanan_id' => $orderLayananId],
-            [
-                'pelanggan_id' => $request->user()->id,
-                'bengkel_id' => $orderLayanan->layananBengkel->bengkel_id,
-                'rating' => $validasi['rating'],
-                'ulasan' => $validasi['ulasan'] ?? null,
-            ]
-        );
+        try {
+            $ulasanRating = UlasanRating::updateOrCreate(
+                ['order_layanan_id' => $orderLayananId],
+                [
+                    'pelanggan_id' => $request->user()->id,
+                    'bengkel_id' => $orderLayanan->layananBengkel->bengkel_id,
+                    'rating' => $validasi['rating'],
+                    'ulasan' => $validasi['ulasan'] ?? null,
+                ]
+            );
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Ulasan dan rating berhasil disimpan',
-            'data' => $ulasanRating
-        ], 200);
+            $ulasanRatingMontir = \App\Models\UlasanRatingMontir::updateOrCreate(
+                ['order_layanan_id' => $orderLayananId],
+                [
+                    'pelanggan_id' => $request->user()->id,
+                    'montir_id' => $orderLayanan->montir_id,
+                    'rating' => $validasi['rating_montir'],
+                    'ulasan' => $validasi['ulasan_montir'] ?? null,
+                ]
+            );
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Ulasan dan rating berhasil disimpan',
+                'data' => [
+                    'bengkel' => $ulasanRating,
+                    'montir' => $ulasanRatingMontir
+                ]
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
