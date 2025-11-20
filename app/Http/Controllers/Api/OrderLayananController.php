@@ -87,7 +87,8 @@ class OrderLayananController extends Controller
                 'montir.user',
                 'montir.bengkel',
                 'layananBengkel',
-                'itemService'
+                'itemService',
+                'ulasanRating',
             )->find($orderLayananId);
 
         if (!$orderLayanan) {
