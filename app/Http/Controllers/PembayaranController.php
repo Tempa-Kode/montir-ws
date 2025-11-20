@@ -39,7 +39,7 @@ class PembayaranController extends Controller
         $order = OrderLayanan::with('pelanggan')->where('kode_order', $request->kode_order)->first();
 
         // melakukan pemeriksaaan apakah order milik user yang sedang login
-        if ($order->pelanggan_id !== Auth::id()) {
+        if ($order->pelanggan_id !== Auth::user()->id) {
             return response()->json([
                 'status' => false,
                 'message' => 'Unauthorized'
