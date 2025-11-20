@@ -60,7 +60,7 @@ class PembayaranController extends Controller
 
         // menghitung total pembayaran
         $totalHargaItem = ItemService::where('kode_order', $order->kode_order)->sum('harga') ?: 0;
-        $grossAmount = $order->total_bayar = $order->harga_layanan + $totalHargaItem;
+        $grossAmount = $order->harga_layanan + $totalHargaItem;
 
         // menyiapkan parameter untuk Midtrans
         $params = [
