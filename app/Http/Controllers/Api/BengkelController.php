@@ -17,7 +17,7 @@ class BengkelController extends Controller
     public function simpanDataBengkel(Request $request)
     {
         $validasi = $request->validate([
-            'nama' => 'required|string|max:50',
+            'nama' => 'required|unique:bengkel|string|max:50',
             'alamat' => 'required|string',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
