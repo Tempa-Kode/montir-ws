@@ -47,7 +47,7 @@ class PembayaranController extends Controller
         // }
 
         // jika order memiliki snap token dan statusnya pending makan akan mengembalikan token yang sudah ada
-        if ($order->snap_token && $order->payment_status == 'pending') {
+        if ($order->snap_token && $order->status_pembayaran === 'pending') {
             return response()->json([
                 'status' => true,
                 'message' => 'Token sudah ada, gunakan token ini.',
