@@ -174,7 +174,7 @@ class MontirLayananController extends Controller
         try {
             $orderLayanan->harga_layanan = $validasi['harga_layanan'];
             // Update status order
-            $orderLayanan->status = 'selesai';
+            $orderLayanan->status = 'pembayaran';
             $orderLayanan->save();
 
             // Simpan semua item service

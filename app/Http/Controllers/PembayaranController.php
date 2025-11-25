@@ -125,6 +125,7 @@ class PembayaranController extends Controller
             // melakukan pengecekan status transaksi dan memperbarui status pembayaran di database
             if ($notif->transaction_status == 'settlement') {
                 $order->status_pembayaran = 'paid';
+                $order->status = 'selesai';
                 $order->save();
             } elseif ($notif->transaction_status == 'expire') {
                 $order->status_pembayaran = 'expired';
