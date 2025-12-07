@@ -157,9 +157,9 @@ class MontirLayananController extends Controller
     {
         $validasi = $request->validate([
             'harga_layanan' => 'required|numeric|min:0',
-            'item_service' => 'required|array|min:1',
-            'item_service.*.nama_item' => 'required|string',
-            'item_service.*.harga' => 'required|numeric|min:0',
+            'item_service' => 'nullable|array|min:1',
+            'item_service.*.nama_item' => 'nullable|string',
+            'item_service.*.harga' => 'nullable|numeric|min:0',
         ]);
 
         $orderLayanan = OrderLayanan::find($orderLayananId);
@@ -178,11 +178,13 @@ class MontirLayananController extends Controller
             $orderLayanan->save();
 
             // Simpan semua item service
-            foreach ($validasi['item_service'] as $item) {
-                $orderLayanan->itemService()->create([
-                    'nama_item' => $item['nama_item'],
-                    'harga' => $item['harga'],
-                ]);
+            if(isset($validasi['item_service'])){
+                foreach ($validasi['item_service'] as $item) {
+                    $orderLayanan->itemService()->create([
+                        'nama_item' => $item['nama_item'],
+                        'harga' => $item['harga'],
+                    ]);
+                }
             }
 
             DB::commit();
