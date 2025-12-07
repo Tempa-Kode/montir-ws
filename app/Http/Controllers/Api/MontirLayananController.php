@@ -157,7 +157,7 @@ class MontirLayananController extends Controller
     {
         $validasi = $request->validate([
             'harga_layanan' => 'required|numeric|min:0',
-            'item_service' => 'nullable|array|min:1',
+            'item_service' => 'nullable|array|min:0',
             'item_service.*.nama_item' => 'nullable|string',
             'item_service.*.harga' => 'nullable|numeric|min:0',
         ]);
