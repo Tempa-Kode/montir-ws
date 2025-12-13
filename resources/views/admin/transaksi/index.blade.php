@@ -15,7 +15,15 @@
         <div class="col">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Data Transaksi</h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">Data Transaksi</h5>
+                        <a href="{{ route('laporan.transaksi') }}" class="btn btn-primary mb-3">
+                            <span class="material-icons-outlined mr-3" style="font-size: 18px">
+                                download
+                            </span>
+                            Laporan
+                        </a>
+                    </div>
                     <div class="table-responsive">
                         <table id="zero-conf" class="display" style="width:100%">
                             <thead>

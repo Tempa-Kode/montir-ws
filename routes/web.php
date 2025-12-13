@@ -25,4 +25,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [App\Http\Controllers\TransaksiController::class, 'index'])->name('transaksi.index');
         Route::get('/{id}', [App\Http\Controllers\TransaksiController::class, 'show'])->name('transaksi.show');
     });
+
+    Route::prefix('laporan')->group(function () {
+        Route::get('/bengkel', [App\Http\Controllers\LaporanController::class, 'laporanDataBengkel'])->name('laporan.bengkel');
+        Route::get('/pelanggan', [App\Http\Controllers\LaporanController::class, 'laporanDataPelanggan'])->name('laporan.pelanggan');
+        Route::get('/transaksi', [App\Http\Controllers\LaporanController::class, 'laporanDataTransaksi'])->name('laporan.transaksi');
+    });
 });
