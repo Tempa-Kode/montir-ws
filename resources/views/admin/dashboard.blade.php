@@ -82,7 +82,7 @@
                                 <tbody>
                                     @forelse($recentRequests as $request)
                                         <tr>
-                                            <td>#{{ $request->id }}</td>
+                                            <td>{{ $request->kode_order }}</td>
                                             <td>{{ $request->pelanggan->nama }}</td>
                                             <td>{{ $request->layananBengkel->bengkel->nama }}</td>
                                             <td>{{ $request->layananBengkel->jenis_layanan }}</td>
