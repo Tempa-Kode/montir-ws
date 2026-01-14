@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PembayaranController;
+use App\Http\Controllers\ResetPasswordController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -18,6 +19,7 @@ Route::get('/ping', function() {
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/reset-password-request', [ResetPasswordController::class, 'sendLinkResetEmail']);
 
 Route::prefix('profil')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [App\Http\Controllers\Api\ProfilController::class, 'getProfil']);
