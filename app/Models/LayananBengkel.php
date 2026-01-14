@@ -10,6 +10,7 @@ class LayananBengkel extends Model
     protected $fillable = [
         'bengkel_id',
         'jenis_layanan',
+        'harga',
     ];
 
     public function bengkel()

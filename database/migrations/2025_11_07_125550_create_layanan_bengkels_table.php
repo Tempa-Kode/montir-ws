@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('bengkel_id')->constrained('bengkel')->onDelete('cascade');
             $table->string('jenis_layanan');
+            $table->integer('harga');
             $table->timestamps();
         });
     }

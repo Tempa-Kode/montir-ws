@@ -41,7 +41,8 @@ class LayananBengkelContoller extends Controller
     {
         $validasi = $request->validate([
             'jenis_layanan' => 'required|array',
-            'jenis_layanan.*' => 'string|max:100',
+            'jenis_layanan.*.nama' => 'required|string|max:100',
+            'jenis_layanan.*.harga' => 'required|numeric|min:0',
         ]);
 
         $user = $request->user();
@@ -57,7 +58,8 @@ class LayananBengkelContoller extends Controller
         foreach ($validasi['jenis_layanan'] as $layanan) {
             $bengkel->layananBengkel()->create([
                 'bengkel_id' => $bengkel->id,
-                'jenis_layanan' => $layanan,
+                'jenis_layanan' => $layanan['nama'],
+                'harga' => $layanan['harga'],
             ]);
         }
 
@@ -85,12 +87,14 @@ class LayananBengkelContoller extends Controller
     {
         $validasi = $request->validate([
             'jenis_layanan' => 'required',
+            'harga' => 'required|numeric|min:0',
         ]);
 
         DB::beginTransaction();
         try {
             $layanan = LayananBengkel::findOrFail($id);
             $layanan->jenis_layanan = $validasi['jenis_layanan'];
+            $layanan->harga = $validasi['harga'];
             $layanan->save();
 
             DB::commit();
