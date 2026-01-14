@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama', 50);
             $table->text('alamat');
-            $table->string('no_telp', 15);
+            $table->string('no_telp', 13);
             $table->string('email', 50)->unique();
             $table->string('password');
             $table->enum('role', ['pelanggan', 'admin', 'montir', 'bengkel'])->default('pelanggan');
