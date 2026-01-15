@@ -58,7 +58,13 @@ class PublicController extends Controller
                 'foto' => $bengkel->foto ? asset($bengkel->foto) : null,
                 'jarak' => round($bengkel->jarak, 2) . ' km',
                 'jarak_meter' => round($bengkel->jarak * 1000),
-                'layanan' => $bengkel->layananBengkel->pluck('jenis_layanan'),
+                'layanan' => $bengkel->layananBengkel->map(function($layanan) {
+                    return [
+                        'id' => $layanan->id,
+                        'jenis_layanan' => $layanan->jenis_layanan,
+                        'harga' => $layanan->harga,
+                    ];
+                }),
             ];
         });
 
