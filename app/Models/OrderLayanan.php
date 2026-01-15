@@ -18,6 +18,7 @@ class OrderLayanan extends Model
         'status',
         'snap_token',
         'harga_layanan',
+        'biaya_admin',
         'status_pembayaran',
         'bukti_bayar',
     ];

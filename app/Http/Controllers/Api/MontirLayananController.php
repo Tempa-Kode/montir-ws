@@ -173,6 +173,20 @@ class MontirLayananController extends Controller
         DB::beginTransaction();
         try {
             $orderLayanan->harga_layanan = $validasi['harga_layanan'];
+
+            // Hitung total harga layanan + harga item service
+            $totalItemService = 0;
+            if(isset($validasi['item_service'])){
+                foreach ($validasi['item_service'] as $item) {
+                    $totalItemService += $item['harga'];
+                }
+            }
+            $total = $validasi['harga_layanan'] + $totalItemService;
+
+            // hitung biaya admin 5% dari total
+            $biayaAdmin = round(0.05 * $total);
+            $orderLayanan->biaya_admin = $biayaAdmin;
+
             // Update status order
             $orderLayanan->status = 'pembayaran';
             $orderLayanan->save();
