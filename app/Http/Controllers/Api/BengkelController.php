@@ -11,6 +11,16 @@ use App\Models\Montir;
 
 class BengkelController extends Controller
 {
+    // menampilkan seluruh data bengkel
+    public function index() {
+        $bengkel = Bengkel::select('id', 'nama')->get();
+        return response()->json([
+            'status' => true,
+            'message' => 'Data bengkel berhasil diambil',
+            'data' => $bengkel
+        ], 200);
+    }
+
     /**
      * Menyimpan detail data bengkel
      */

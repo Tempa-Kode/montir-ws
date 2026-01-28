@@ -21,6 +21,8 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/reset-password-request', [ResetPasswordController::class, 'sendLinkResetEmail']);
 
+Route::get('/bengkel-all', [App\Http\Controllers\Api\BengkelController::class, 'index']);
+
 Route::prefix('profil')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [App\Http\Controllers\Api\ProfilController::class, 'getProfil']);
     Route::put('/update', [App\Http\Controllers\Api\ProfilController::class, 'updateProfil']);

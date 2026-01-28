@@ -13,18 +13,24 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validasi = $request->validate([
+            'bengkel_id' => 'sometimes|exists:bengkel,id',
             'nama' => 'required|string|max:50',
             'alamat' => 'required|string',
             'no_telp' => 'required|string|max:15',
             'email' => 'required|string|email|max:50|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:pelanggan,bengkel',
+            'role' => 'required|in:pelanggan,bengkel,montir',
         ]);
 
         $validasi['password'] = bcrypt($validasi['password']);
         DB::beginTransaction();
         try {
             $user = User::create($validasi);
+            if (isset($validasi['bengkel_id']) && $validasi['role'] === User::ROLE_MONTIR) {
+                $user->montir()->create([
+                    'bengkel_id' => $validasi['bengkel_id'],
+                ]);
+            }
             DB::commit();
             return response()->json([
                 'status' => true,

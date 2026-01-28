@@ -11,6 +11,7 @@ class Montir extends Model
     protected $fillable = [
         'bengkel_id',
         'user_id',
+        'verifikasi',
     ];
 
     public function bengkel()
