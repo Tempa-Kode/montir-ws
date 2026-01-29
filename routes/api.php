@@ -42,6 +42,7 @@ Route::prefix('bengkel-management')->middleware('auth:sanctum')->group(function 
         Route::get('/daftar-montir', [App\Http\Controllers\Api\MontirBengkelController::class, 'daftarMontirBengkel']);
         Route::post('/tambah-montir', [App\Http\Controllers\Api\MontirBengkelController::class, 'tambahMontirBengkel']);
         Route::delete('/hapus-montir/{id}', [App\Http\Controllers\Api\MontirBengkelController::class, 'hapusMontirBengkel']);
+        Route::put('/verifikasi-montir/', [App\Http\Controllers\Api\MontirBengkelController::class, 'verifikasiMontirBengkel']);
     });
 
     Route::prefix('order-layanan')->group(function () {

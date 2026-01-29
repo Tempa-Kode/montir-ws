@@ -114,4 +114,30 @@ class MontirBengkelController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Verifikasi montir bengkel
+     */
+    public function verifikasiMontirBengkel(Request $request)
+    {
+        $id = $request->query('montir_id');
+        $montir = Montir::find($id);
+        if (!$montir) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Montir tidak ditemukan',
+            ], 404);
+        } elseif ($montir->verifikasi) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Montir sudah terverifikasi',
+            ], 400);
+        }
+        $montir->verifikasi = true;
+        $montir->save();
+        return response()->json([
+            'status' => true,
+            'message' => 'Montir berhasil diverifikasi',
+        ], 200);
+    }
 }
